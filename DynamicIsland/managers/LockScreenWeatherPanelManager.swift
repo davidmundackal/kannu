@@ -8,6 +8,7 @@ final class LockScreenWeatherPanelManager {
 
     private var window: NSWindow?
     private var hasDelegated = false
+    private(set) var latestFrame: NSRect?
 
     private init() {}
 
@@ -23,6 +24,7 @@ final class LockScreenWeatherPanelManager {
         guard let window else { return }
         window.orderOut(nil)
         window.contentView = nil
+        latestFrame = nil
     }
 
     private func render(snapshot: LockScreenWeatherSnapshot, makeVisible: Bool) {
@@ -39,6 +41,7 @@ final class LockScreenWeatherPanelManager {
         let targetFrame = frame(for: fittingSize, on: screen)
         let window = ensureWindow()
         window.setFrame(targetFrame, display: true)
+        latestFrame = targetFrame
         window.contentView = hostingView
 
         if makeVisible {
